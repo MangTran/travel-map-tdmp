@@ -13,7 +13,6 @@ router.post("/", async (req, res) => {
 });
 
 //get al pins
-
 router.get("/", async (req, res) => {
   try {
     const pins = await Pin.find();

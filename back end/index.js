@@ -4,6 +4,22 @@ const app = express();
 const dotenv = require("dotenv");
 const pinRoute = require("./routes/pins");
 const userRoute = require("./routes/users");
+const cors = require("cors");
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: "Content-Type",
+  })
+);
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  next();
+});
 
 dotenv.config();
 app.use(express.json());
