@@ -7,9 +7,11 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import "./App.css";
 import axios from "axios";
 import { format } from "timeago.js";
+import Register from "./components/Register";
+import Login from "./components/Login";
 
 function App() {
-  const [showPopup, setShowPopup] = useState(true);
+  const myStorage = window.localStorage;
 
   const [pins, setPins] = useState([]);
 
@@ -22,7 +24,9 @@ function App() {
     zoom: 8,
   });
 
-  const currentUser = "jane";
+  const [currentUser, setCurrentUser] = useState(myStorage.getItem("user"));
+  const [showRegister, setShowRegister] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
 
   //new title, new desc, and new rating
   const [title, setTitle] = useState(null);
@@ -81,9 +85,15 @@ function App() {
     }
   };
 
+  const handleLogout = () => {
+    myStorage.removeItem("user");
+    setCurrentUser(null);
+  };
+
   return (
     <div className="App">
       <Map
+        className="map"
         {...settings}
         {...viewState}
         mapboxAccessToken={process.env.REACT_APP_MAPBOX}
@@ -99,8 +109,8 @@ function App() {
             <Marker
               longitude={p.long}
               latitude={p.lat}
-              offsetLeft={-20}
-              offsetRight={-10}
+              offsetLeft={-viewState.zoom * 3.5}
+              offsetRight={-viewState.zoom * 7}
             >
               <LocationOnIcon
                 onClick={() => handleMarkerClick(p._id, p.lat, p.long)}
@@ -175,7 +185,40 @@ function App() {
             </div>
           </Popup>
         )}
+
+        <div className="map-overlay">
+          {currentUser ? (
+            <button className="button logout" onClick={handleLogout}>
+              Log Out
+            </button>
+          ) : (
+            <div className="buttons">
+              <button
+                className="button login"
+                onClick={() => setShowLogin(true) && setShowRegister(false)}
+              >
+                Login
+              </button>
+              <button
+                className="button register"
+                onClick={() => setShowRegister(true) && setShowLogin(false)}
+              >
+                Register
+              </button>
+            </div>
+          )}
+        </div>
       </Map>
+      <div>
+        {showRegister && <Register setShowRegister={setShowRegister} />}
+        {showLogin && (
+          <Login
+            setShowLogin={setShowLogin}
+            myStorage={myStorage}
+            setCurrentUser={setCurrentUser}
+          />
+        )}
+      </div>
     </div>
   );
 }
