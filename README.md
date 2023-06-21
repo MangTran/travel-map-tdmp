@@ -8,6 +8,15 @@ This project will allow you to pin your location and share your experience, your
 * Fetching data from Node.js and  post request using Axios
 * Adding new Location
 
+#### Techical Skills
+
+- Creating Node.js Express App 
+- Connecting MongoDB with Mongoose
+- Creating a React App
+- Using Axios
+- Login and Register System
+- Using React Local Storage
+
 # Demo screen
 
 ### Welcome screen
